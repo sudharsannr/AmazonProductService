@@ -7,7 +7,7 @@ public class ReviewsData
 
 	private String productId;
 	private String productName;
-	private double positivePercentage;
+	private Percentage percentage;
 	private ArrayList<String> tag;
 	private ArrayList<String> occurences;
 
@@ -23,14 +23,15 @@ public class ReviewsData
 	{
 		this.productId = product_id;
 		this.productName = product_name;
-		this.positivePercentage = positive_percentage;
+		percentage = new Percentage(positive_percentage,
+				100 - positive_percentage);
 		this.tag = tag;
 		this.occurences = count;
 	}
 
-	public double getPositivePercentage()
+	public Percentage getPercentage()
 	{
-		return this.positivePercentage;
+		return this.percentage;
 	}
 
 	public String getProductId()
@@ -51,16 +52,6 @@ public class ReviewsData
 	public ArrayList<String> getOccurences()
 	{
 		return occurences;
-	}
-
-	@Override
-	public String toString()
-	{
-		return new StringBuffer(" Product Id : ").append(this.productId)
-				.append(" Product Name : ").append(this.productName)
-				.append(" Positive % : ").append(this.positivePercentage)
-				.append(" Negative % : ").append(this.tag)
-				.append(" Top K words : ").append(this.occurences).toString();
 	}
 
 }
