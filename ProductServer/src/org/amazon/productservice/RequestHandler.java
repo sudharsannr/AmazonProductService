@@ -1,7 +1,5 @@
 package org.amazon.productservice;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.ws.rs.GET;
@@ -38,46 +36,41 @@ public class RequestHandler
 			String productName = resArr[0];
 			String[] percentArr = resArr[1].split("->");
 			double posPercentage = Double.parseDouble(percentArr[0]);
-			String[] tagArr = percentArr[1].split("\\|\\|");
+			String[] tagArr = percentArr[1].trim().split("\\|\\|");
 			ArrayList<String> tag = new ArrayList<String>();
-			ArrayList<String> count = new ArrayList<String>();
-			for (int i = 0; i < 5; i++)
+			ArrayList<Integer> count = new ArrayList<Integer>();
+			for (int i = 0; i < 5 && i < tagArr.length; i++)
 			{
 				String[] splitArr = tagArr[i].split(":");
 				tag.add(splitArr[0]);
-				count.add(splitArr[1]);
+				count.add(Integer.parseInt(splitArr[1]));
 			}
 			ReviewsData rd = new ReviewsData(productIdentifier, productName,
 					posPercentage, tag, count);
 			ObjectMapper mapper = new ObjectMapper();
 			ObjectNode jsonObj = null;
-			try
+			JsonNode jsonNode = mapper.valueToTree(rd);
+			if (jsonNode.isObject())
 			{
-				mapper.writerWithDefaultPrettyPrinter().writeValue(
-						new File("user-modified.json"), rd);
-				JsonNode jsonNode = mapper.valueToTree(rd);
-				if (jsonNode.isObject())
-				{
-					jsonObj = (ObjectNode) jsonNode;
-				}
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
+				jsonObj = (ObjectNode) jsonNode;
 			}
 
 			if (null != jsonObj)
 			{
 				String result = jsonObj.toString();
-				return Response.status(200).entity(result).build();
+				return Response.status(200).header("Access-Control-Allow-Origin", "*").entity(result).build();
 			}
 			else
 			{
-				return Response.status(200).entity("None found").build();
+				System.out.println("JsonObject null and returning none found!");
+				return Response.status(200).header("Access-Control-Allow-Origin", "*").entity("None found").build();
 			}
 		}
 		else
-			return Response.status(200).entity(productInfo).build();
+		{
+			System.out.println("Response is none found!");
+			return Response.status(200).header("Access-Control-Allow-Origin", "*").entity(productInfo).build();
+		}
 	}
 
 }

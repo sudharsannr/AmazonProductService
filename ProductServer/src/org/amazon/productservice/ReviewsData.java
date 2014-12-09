@@ -9,7 +9,7 @@ public class ReviewsData
 	private String productName;
 	private Percentage percentage;
 	private ArrayList<String> tag;
-	private ArrayList<String> occurences;
+	private ArrayList<Integer> occurences;
 
 	// Must have no-argument constructor
 	public ReviewsData()
@@ -19,7 +19,7 @@ public class ReviewsData
 
 	public ReviewsData(String product_id, String product_name,
 			double positive_percentage, ArrayList<String> tag,
-			ArrayList<String> count)
+			ArrayList<Integer> count)
 	{
 		this.productId = product_id;
 		this.productName = product_name;
@@ -49,7 +49,7 @@ public class ReviewsData
 		return tag;
 	}
 
-	public ArrayList<String> getOccurences()
+	public ArrayList<Integer> getOccurences()
 	{
 		return occurences;
 	}
